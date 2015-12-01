@@ -24,7 +24,7 @@ Package.onTest(function (api) {
     'underscore',
     'check'
   ]);
-  api.use('zen:actions');
+  api.use('zenflux:actions');
   api.addFiles('src/tests/client/unit/actionCreatorSpec.js');
   api.addFiles('src/tests/client/unit/actionMixinsSpec.js');
 });
