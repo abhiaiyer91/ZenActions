@@ -15,10 +15,15 @@ Package.onUse(function (api) {
 
   // Client
   api.addFiles(['src/client/actions.js'], 'client');
+
+  api.export([
+    'ZenAction',
+    'ZenMixins'
+  ]);
 });
 
 Package.onTest(function (api) {
-  api.use('sanjo:jasmine');
+  api.use('sanjo:jasmine@0.20.3');
   api.use('ecmascript');
   api.use([
     'underscore',

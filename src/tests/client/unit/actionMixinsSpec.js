@@ -4,6 +4,7 @@ describe('ActionMixins', function () {
   });
 
   it('should be an object', function () {
+    console.log(ZenMixins, _.isObject(ZenMixins));
     expect(_.isObject(ZenMixins)).toBe(true);
   });
 
