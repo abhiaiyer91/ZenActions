@@ -14,7 +14,7 @@ Package.onUse(function (api) {
   ]);
 
   // Client
-  api.addFiles('actions.js');
+  api.addFiles(['src/client/actions.js'], 'client');
 });
 
 Package.onTest(function (api) {
@@ -22,8 +22,7 @@ Package.onTest(function (api) {
   api.use('ecmascript');
   api.use([
     'underscore',
-    'check',
-    'workpop:logger'
+    'check'
   ]);
   api.use('zen:actions');
   api.addFiles('src/tests/client/unit/actionCreatorSpec.js');
