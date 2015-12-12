@@ -33,11 +33,11 @@ Register a function the Mixin namespace
 // we need to share a function that creates a post in forum
 ZenMixins.registerMixin('createPostMixin', {
   // a function that calls submitPost meteor methods and handles some side effects
-  createPost(postData, postState, callback) {
+  createPost(postData, postVisibilityStore, callback) {
      return Meteor.call('submitPost', postData, function (e, r) {
        if (!e) {
           // we passed some reactive var from our view to set some flag after our method has been called 
-          postState.set(true);
+          postVisibilityStore.set(false);
           // some callback function
           if (_.isFunction(callback) {
             return callback();
@@ -77,7 +77,56 @@ Our markup would look something like this:
 
 ```handlebars
   <template name="postSubmitComponent">
-    <textarea></textarea>
-    <button class="ev-submit-post">Submit Post</button>
+    <div>
+      <div>
+        <button class="ev-toggle-box">Toggle Post Box</button>
+      </div>
+      {{#if postBoxToggled}}
+        <div>
+          <input type="text"/>
+          <button class="ev-submit-post">Submit Post</button>
+        </div>
+      {{/if}
+    </div>
   </template>
 ```
+
+Our template code will look something like this:
+
+```js
+// onCreated we will bind the ZenAction to the template instance
+Template.postSubmitComponent.onCreated(function () {
+  var template = this;
+  // set up a reactive var 
+  template.postVisibilityStore = new ReactiveVar(false);
+  // I bind the ZenAction to the oncreated so now throughout my lifecycle i have access to these methods mixed in
+  template.actionCreator = new ZenAction(['createPostMixin']);
+});
+// Setup the visibility helper
+Template.postSubmitComponent.helpers({
+  postBoxToggled() {
+    var template = Template.instance();
+    return template.postVisibilityStore.get();
+  }
+});
+// now in our event we make magic happen
+Template.postSubmitComponent.events({
+  'click .ev-submit-post': function (event, template) {
+     // grab the post data from the template
+     let postData = template.data.postData;
+     // get the post visibility store
+     let postVisibilityStore = template.postVisibilityStore;
+     // call create post
+     return template.actionCreator.createPost(postData, postVisibilityStore, function () {
+       // do something here
+     });
+  },
+  'click .ev-toggle-box': function (event, template) {
+    // get the post visbility store
+    let postVisibilityStore = template.postVisibilityStore;
+    return template.actionCreator.togglePostBox(postVisibilityStore);
+  }
+});
+```
+
+
