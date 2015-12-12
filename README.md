@@ -61,7 +61,7 @@ Important Information:
 * `Mixins` are really convenient in a package based architecture. This way you can assure that your mixin is registered before using it, and you can also control mixin dependencies between views.
  
 
-### Actions (Using Mixins)
+### Actions
 
 The way we utilize our actions is via a `ZenAction`
 
