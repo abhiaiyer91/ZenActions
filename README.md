@@ -197,6 +197,7 @@ class PostSubmitComponent extends React.Component {
     )
   }
 }
+reactMixin(PostSubmitComponent.prototype, TrackerReact);
 ```
 
 You can take the `React` example further with `Flux` implementations. More on that soon.
