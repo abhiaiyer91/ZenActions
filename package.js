@@ -1,6 +1,6 @@
 Package.describe({
   name: 'zenflux:actions',
-  version: '0.0.3',
+  version: '0.0.4',
   summary: 'Zen Action creators and Mixins',
   documentation: 'README.md'
 });
