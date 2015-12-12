@@ -10,6 +10,7 @@ abstract business logic from your views into digestable chunks to use between `B
 * [Getting Started](#getting-started)
 * [Mixins](#mixins)
 * [Actions] (#actions)
+* [Why] (#why)
 
 ### Getting Started
 
@@ -86,7 +87,7 @@ Our markup would look something like this:
           <input type="text"/>
           <button class="ev-submit-post">Submit Post</button>
         </div>
-      {{/if}
+      {{/if}}
     </div>
   </template>
 ```
@@ -102,6 +103,9 @@ Template.postSubmitComponent.onCreated(function () {
   // I bind the ZenAction to the oncreated so now throughout my lifecycle i have access to these methods mixed in
   template.actionCreator = new ZenAction(['createPostMixin']);
 });
+```
+
+```js
 // Setup the visibility helper
 Template.postSubmitComponent.helpers({
   postBoxToggled() {
@@ -109,6 +113,9 @@ Template.postSubmitComponent.helpers({
     return template.postVisibilityStore.get();
   }
 });
+```
+
+```js
 // now in our event we make magic happen
 Template.postSubmitComponent.events({
   'click .ev-submit-post': function (event, template) {
@@ -128,5 +135,80 @@ Template.postSubmitComponent.events({
   }
 });
 ```
+
+### React Example
+
+I prefer ES2015 syntax for React, but we can also write this in `createClass`. Let me know if you get tripped up, and i'll put an example that way.
+
+
+```jsx
+import React from 'react';
+import reactMixin from 'react-mixin';
+const PostSubmitBox = (submitPostClick) => {
+  return (
+    <div>
+      <input type="text"/>
+      <button onClick={submitPostClick}>Submit Post</button>
+    </div>
+  )
+};
+class PostSubmitComponent extends React.Component {
+  constructor() {
+    // in the constructor bind our necessary tools
+    super();
+    this.actionCreator = new ZenAction(['createPostMixin']);
+    this.postVisibilityStore = new ReactiveVar(false);
+    this.toggleBox = this.toggleBox.bind(this);
+    this.submitPost = this.submitPost.bind(this);
+    this.postBoxToggle = this.postBoxToggle.bind(this);
+    // using state here but wont hook up how this changes, so use your imagination
+    this.state = {
+      postData: {}
+    }
+  }
+  submitPost() {
+    let postData = this.state.postData;
+    let postVisibilityStore = this.postVisibilityStore;
+    return this.actionCreator.createPost(postData, postVisibilityStore);
+  }
+  toggleBox() {
+     // get the post visbility store
+      let postVisibilityStore = this.postVisibilityStore;
+      return this.actionCreator.togglePostBox(postVisibilityStore);
+  }
+  postBoxToggle() {
+    return this.postVisiblityStore.get();
+  }
+  render() {
+    let postBoxComponent;
+    // if visibility is on
+    if (this.postBoxToggle()) {
+      postBoxComponent = <PostSubmitBox submitPostClick={this.submitPost}/>
+    } else {
+      postBoxComponent = null;
+    }
+    return (
+      <div>
+        <div>
+          <button onClick={this.toggleBox}>Toggle Post Box</button>
+        </div>
+        {postBoxComponent}
+      </div>
+    )
+  }
+}
+```
+
+You can take the React example further with Flux implementations. More on that soon.
+
+### Why?
+
+Why is this pattern good? Out of the box `Blaze` does not have the component system, nor the ability to abstract functionality
+between templates. First people will say.... "USE BLAZE COMPONENTS". Well that api is too huge, and not in my interest. At Workpop we
+have achieved a tremendous amount of reusability by keeping our api simple and in our OWN CONTROL.
+
+For React? Even with the component system, you will be adding your action layer somewhere. Whether you use redux or vanilla flux...actions
+will live somewhere. Utilize the ZenActions package as your action layer. Let it bridge your UI and your business logic in a minimal, and powerful way.
+You get to decide the shape of your actions, there is no "right" way...only a vehicle to do so.
 
 
