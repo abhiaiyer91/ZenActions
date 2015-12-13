@@ -2,7 +2,7 @@
 
 A simple, yet powerful tool to reuse business logic in the view layer.
 
-`ZenActions` is the first of 2 packages to help build your Meteor app in a `"Flux"-like manner`. `ZenActions` allow you to 
+`ZenActions` is the first of 2 packages to help build your Meteor app in a `"Flux"-like manner`. `ZenActions` allow you to
 abstract business logic from your views into digestable chunks to use between `Blaze` Templates or `React` Components.
 
 I wrote a blog post about this package here [ZenActions](https://medium.com/@abhiaiyer/zenactions-972e5c61c30c#.h55t6cxye)
@@ -32,21 +32,21 @@ Let's look at how we register mixins.
 Register a function the Mixin namespace
 
 ```js
-// We want to share functionality between 2 views. For this example, let's say 
+// We want to share functionality between 2 views. For this example, let's say
 // we need to share a function that creates a post in forum
 ZenMixins.registerMixin('createPostMixin', {
   // a function that calls submitPost meteor methods and handles some side effects
   createPost(postData, postVisibilityStore, callback) {
      return Meteor.call('submitPost', postData, function (e, r) {
        if (!e) {
-          // we passed some reactive var from our view to set some flag after our method has been called 
+          // we passed some reactive var from our view to set some flag after our method has been called
           postVisibilityStore.set(false);
           // some callback function
           if (_.isFunction(callback) {
             return callback();
           }
        }
-     }
+     });
   },
   // We want to have a function to toggle the post box on and off
   togglePostBox(postVisibilityStore) {
@@ -55,13 +55,13 @@ ZenMixins.registerMixin('createPostMixin', {
 });
 ```
 
-Awesome! Now I have a reusable piece of code to use between any views that need this functionality. As you can see, all we need to 
+Awesome! Now I have a reusable piece of code to use between any views that need this functionality. As you can see, all we need to
 use this mixin is some `postData` (which can come from your views data) and some `reactive variable/dict/session `
 
 Important Information:
 
 * `Mixins` are really convenient in a package based architecture. This way you can assure that your mixin is registered before using it, and you can also control mixin dependencies between views.
- 
+
 
 ### Actions
 
@@ -69,7 +69,7 @@ The way we utilize our actions is via a `ZenAction`
 
 #### ZenAction([mixins])
 
-A`ZenAction` is a class that takes registerd mixins and "mixes" them into its instance object. We then bind this object to the instance of our
+A`ZenAction` is a factory that takes registerd mixins and "mixes" them into its instance object. We then bind this object to the instance of our
 `Blaze` Template or `React` Component.
 
 ### Blaze Example
@@ -100,10 +100,10 @@ Our template code will look something like this:
 // onCreated we will bind the ZenAction to the template instance
 Template.postSubmitComponent.onCreated(function () {
   var template = this;
-  // set up a reactive var 
+  // set up a reactive var
   template.postVisibilityStore = new ReactiveVar(false);
   // I bind the ZenAction to the oncreated so now throughout my lifecycle i have access to these methods mixed in
-  template.actionCreator = new ZenAction(['createPostMixin']);
+  template.actionCreator = ZenAction(['createPostMixin']);
 });
 ```
 
@@ -158,7 +158,7 @@ class PostSubmitComponent extends React.Component {
   constructor() {
     // in the constructor bind our necessary tools
     super();
-    this.actionCreator = new ZenAction(['createPostMixin']);
+    this.actionCreator = ZenAction(['createPostMixin']);
     this.postVisibilityStore = new ReactiveVar(false);
     this.toggleBox = this.toggleBox.bind(this);
     this.submitPost = this.submitPost.bind(this);
