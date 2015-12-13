@@ -17,7 +17,7 @@ abstract business logic from your views into digestable chunks to use between `B
 Add `ZenActions` to your app:
 
 ```shell
-meteor add zenflux:zen-actions
+meteor add zenflux:actions
 ```
 ### Mixins
 
