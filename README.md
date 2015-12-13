@@ -5,6 +5,8 @@ A simple, yet powerful tool to reuse business logic in the view layer.
 `ZenActions` is the first of 2 packages to help build your Meteor app in a `"Flux"-like manner`. `ZenActions` allow you to 
 abstract business logic from your views into digestable chunks to use between `Blaze` Templates or `React` Components.
 
+I wrote a blog post about this package here [ZenActions](https://medium.com/@abhiaiyer/zenactions-972e5c61c30c#.h55t6cxye)
+
 ## Table of Contents
 
 * [Getting Started](#getting-started)
