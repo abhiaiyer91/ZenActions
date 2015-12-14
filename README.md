@@ -7,6 +7,8 @@ abstract business logic from your views into digestable chunks to use between `B
 
 I wrote a blog post about this package here [ZenActions](https://medium.com/@abhiaiyer/zenactions-972e5c61c30c#.h55t6cxye)
 
+Example app (BLAZE) here [ZenActions example](https://github.com/abhiaiyer91/ZenScope-Blaze)
+
 ## Table of Contents
 
 * [Getting Started](#getting-started)
