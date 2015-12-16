@@ -24,7 +24,7 @@ ZenMixins = {
  */
 ZenAction = function ZenAction(...mixins) {
   // check if the mixin array is an array of strings
-  check(mixins, Match.Optional([String]));
+  Match.Optional([String]);
 
   if (_.isEmpty(mixins)) {
     return;
